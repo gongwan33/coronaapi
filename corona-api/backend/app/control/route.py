@@ -1,6 +1,24 @@
 from flask import jsonify, request, session, app, current_app, make_response, send_file, Response
 import re
 import pandas as pd
+import math
+
+"""
+    :param lon: longitude 
+    :param lat: latitude
+    :param W: image width
+    :param H: image height
+"""
+def millerToXY (lon, lat, W, H):
+    xy_coordinate = []
+    mill = 2.3   # a constant of Miller cast
+    x = lon*math.pi/180  
+    y = lat*math.pi/180
+    y = 1.25*math.log(math.tan(0.25*math.pi+0.4*y))
+    x = (W/2)+(W/(2*math.pi))*x 
+    y = (H/2)-(H/(2*mill))*y 
+    xy_coordinate.append((x,y))
+    return xy_coordinate
 
 def yearConv(year):
     if year is not None and len(year) == 2:
