@@ -16,6 +16,7 @@ flask-cors = "*"
 flask-session = "*"
 flask-mail = "*"
 gunicorn = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"
