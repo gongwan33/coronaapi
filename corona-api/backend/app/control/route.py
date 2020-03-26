@@ -57,9 +57,9 @@ def setRoutes(app):
     def getCoronaData(date):
         try: 
             dataDir = app.config['SOURCE_DATA']
-            confirmedDat = dataDir + '/time_series_19-covid-Confirmed.csv'
-            deathDat = dataDir + '/time_series_19-covid-Deaths.csv'
-            recoveredDat = dataDir + '/time_series_19-covid-Recovered.csv'
+            confirmedDat = dataDir + '/time_series_covid19_confirmed_global.csv'
+            deathDat = dataDir + '/time_series_covid19_deaths_global.csv'
+            recoveredDat = dataDir + '/time_series_covid19_recovered_global.csv'
 
             confirmDf = pd.read_csv(confirmedDat)
             deathDf = pd.read_csv(deathDat)
