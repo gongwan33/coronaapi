@@ -26,6 +26,17 @@ def yearConv(year):
     else:
         return year
 
+def colToDateStr(col):
+    match = re.fullmatch("(\d*)\/(\d*)\/(\d*)", col)
+    if match is not None:
+        groups = match.groups()
+        year = yearConv(groups[2])
+        dateStr = year + '-' + groups[0] + '-' + groups[1]
+        return dateStr
+    else:
+        return None
+
+
 def dfToDict(df, date):
     resDict = []
     for index, row in df.iterrows():
@@ -43,16 +54,21 @@ def dfToDict(df, date):
                     'date': '1900-01-01',
                     'number': '-1',
             }
-            for col in df.columns:
-                if type(col) is str:
-                    match = re.fullmatch("(\d*)\/(\d*)\/(\d*)", col)
-                    if match is not None:
-                        groups = match.groups()
-                        year = yearConv(groups[2])
-                        dateStr = year + '-' + groups[0] + '-' + groups[1]
-                        if date == dateStr:
-                            dateData['date'] = dateStr
-                            dateData['number'] = row[col]
+
+            if date == 'latest':
+                lastCol = df.columns[-1]
+                dateStr = colToDateStr(lastCol) 
+                if dateStr is not None:
+                    dateData['date'] = dateStr
+                    dateData['number'] = row[lastCol]
+            else: 
+                for col in df.columns:
+                    if type(col) is str:
+                        dateStr = colToDateStr(col)
+                        if dateStr is not None:
+                            if date == dateStr:
+                                dateData['date'] = dateStr
+                                dateData['number'] = row[col]
 
             areaDict['data']= dateData
             resDict.append(areaDict)
