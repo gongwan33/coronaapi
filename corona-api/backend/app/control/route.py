@@ -27,7 +27,7 @@ def yearConv(year):
         return year
 
 def dfToDict(df, date):
-    resDict = {}
+    resDict = []
     for index, row in df.iterrows():
         areaKey = row['Country/Region']
         if row['Province/State'] is not None and type(row['Province/State']) is str and len(str(row['Province/State']).strip()) > 0:
@@ -35,9 +35,14 @@ def dfToDict(df, date):
         
         if areaKey != None and len(areaKey) > 0:
             areaDict = {}
+            areaDict['name'] = areaKey
             areaDict['lat'] = row['Lat']
-            areaDict['long'] = row['Long']
+            areaDict['lng'] = row['Long']
 
+            dateData = {
+                    'date': '1900-01-01',
+                    'number': '-1',
+            }
             for col in df.columns:
                 if type(col) is str:
                     match = re.fullmatch("(\d*)\/(\d*)\/(\d*)", col)
@@ -46,9 +51,11 @@ def dfToDict(df, date):
                         year = yearConv(groups[2])
                         dateStr = year + '-' + groups[0] + '-' + groups[1]
                         if date == dateStr:
-                            areaDict[dateStr] = row[col]
+                            dateData['date'] = dateStr
+                            dateData['number'] = row[col]
 
-            resDict[areaKey] = areaDict
+            areaDict['data']= dateData
+            resDict.append(areaDict)
 
     return resDict
 
