@@ -75,6 +75,15 @@ def dfToDict(df, date):
 
     return resDict
 
+def getDateList(df):
+    dateList = []
+    for col in df.columns:
+        date = colToDateStr(col)
+        if date is not None:
+            dateList.append(date);
+
+    return dateList;
+
 def setRoutes(app):
     @app.route('/corona/nz/YTExsed193847dkdIEDUCJkdslei394803/<date>', methods = ['GET'])
     def getCoronaData(date):
@@ -93,8 +102,11 @@ def setRoutes(app):
             recoveredDict = dfToDict(recoveredDf, date)
 
             return jsonify({
+                'confirmedDateList': getDateList(confirmDf),
                 'confirmed': confirmDict,
+                'deathsDateList': getDateList(deathDf),
                 'deaths': deathDict,
+                'recoveredDateList': getDateList(recoveredDf),
                 'recovered': recoveredDict,
             })
         except Exception as e:
